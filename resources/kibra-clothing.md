@@ -33,33 +33,28 @@ Config.DrawText = false -- drawtext or false (2drawtext)
 Install the cloth.sql file in the script to your database.
 
 ```sql
-CREATE TABLE IF NOT EXISTS `kibra-motels` (
+CREATE TABLE IF NOT EXISTS `playerskins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `roomid` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `date` varchar(255) NOT NULL,
-  `pdata` varchar(255) NOT NULL,
-  `invoiceseen` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `kibra-motels-business` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `motel` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
-  `money` float NOT NULL,
-  `roomprice` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `kibra-motels-cache` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rid` text NOT NULL,
   `citizenid` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+  `model` varchar(255) NOT NULL,
+  `skin` text NOT NULL,
+  `active` tinyint(2) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  KEY `citizenid` (`citizenid`),
+  KEY `active` (`active`)
+) ENGINE=InnoDB AUTO_INCREMENT=43010 DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `player_outfits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `citizenid` varchar(50) DEFAULT NULL,
+  `outfitname` varchar(50) NOT NULL,
+  `model` varchar(50) DEFAULT NULL,
+  `skin` text DEFAULT NULL,
+  `outfitId` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `citizenid` (`citizenid`),
+  KEY `outfitId` (`outfitId`)
+) ENGINE=InnoDB AUTO_INCREMENT=8970 DEFAULT CHARSET=utf8mb4;
 ```
 
 First open the **esx\_identity/client/main.lua** file. After you open it, find this code block.
