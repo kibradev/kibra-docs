@@ -4,6 +4,8 @@ description: Documentation about installation and errors.
 
 # kibra-clothing
 
+#### <mark style="color:green;">Current Version 1.0.0</mark>
+
 ## Target System
 
 If you want drawtext, if you want target. With these options on the config file, you can turn off the target system and open the drawtext system. Or you can do the opposite.
@@ -14,19 +16,34 @@ Config.UseTarget = true -- qb-target or bt-target (editing target.lua)
 Config.DrawText = false -- drawtext or false (2drawtext)
 ```
 
+If you are using the target system, The server.cfg startup sequence should be as follows;
+
+```c
+ensure PolyZone
+ensure bt-target // or qb-target
+ensure kibra-clothing
+```
+
 **Supported targets**
 
 * bt-target (esx) [Download](https://github.com/brentN5/bt-target)
 * qb-target (qbcore) **** [Download](https://github.com/qbcore-framework/qb-target)
+* Required [PolyZone](https://github.com/mkafrin/PolyZone)
 
 #### Current Version 1.0.0
 
-## **Installation Guide for ESX**
+## **Installation**
 
-<mark style="color:red;">**Requirements;**</mark>
+<mark style="color:red;">**Requirements for ESX;**</mark>
 
 * esx\_multicharacter _(If you are using Multicharacter)_
 * esx\_identity
+
+<mark style="color:red;">**Requirements for QBCore**</mark>
+
+* qb-multicharacter
+
+****:thumbsup: For the **QBCore** version, it is sufficient to start the plugin and read the sql file.
 
 ## _**Step 1**_
 
