@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `player_outfits` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8970 DEFAULT CHARSET=utf8mb4;
 ```
 
-### <mark style="color:blue;">Follow the steps below if you are using ESX.</mark>
+#### <mark style="color:orange;">Follow the steps below if you are using ESX.</mark>
 
 First open the **esx\_identity/client/main.lua** file. After you open it, find this code block.
 
