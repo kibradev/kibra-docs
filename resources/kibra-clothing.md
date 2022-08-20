@@ -4,7 +4,7 @@ description: Documentation about installation and errors.
 
 # kibra-clothing
 
-## Added Target support.
+## Target System
 
 If you want drawtext, if you want target. With these options on the config file, you can turn off the target system and open the drawtext system. Or you can do the opposite.
 
