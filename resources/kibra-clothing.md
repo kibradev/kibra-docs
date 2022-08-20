@@ -6,12 +6,18 @@ description: Documentation about installation and errors.
 
 ## Added Target support.
 
-For servers that don't want to use drawtext-like functions, we've added target support to the outfit system. You can edit _**target.lua**_ to edit it.
+If you want drawtext, if you want target. With these options on the config file, you can turn off the target system and open the drawtext system. Or you can do the opposite.
+
+```lua
+Config.UseTarget = true -- qb-target or bt-target (editing target.lua)
+
+Config.DrawText = false -- drawtext or false (2drawtext)
+```
 
 **Supported targets**
 
-* bt-target [Download](https://github.com/brentN5/bt-target)
-* qb-target **** [Download](https://github.com/qbcore-framework/qb-target)
+* bt-target (esx) [Download](https://github.com/brentN5/bt-target)
+* qb-target (qbcore) **** [Download](https://github.com/qbcore-framework/qb-target)
 
 #### Current Version 1.0.0
 
