@@ -4,9 +4,18 @@ description: Documentation about installation and errors.
 
 # kibra-clothing
 
+## Added Target support.
+
+For servers that don't want to use drawtext-like functions, we've added target support to the outfit system. You can edit _**target.lua**_ to edit it.
+
+**Supported targets**
+
+* bt-target [Download](https://github.com/brentN5/bt-target)
+* qb-target **** [Download](https://github.com/qbcore-framework/qb-target)
+
 #### Current Version 1.0.0
 
-**Installation Guide for ESX**
+## **Installation Guide for ESX**
 
 <mark style="color:red;">**Requirements;**</mark>
 
@@ -14,6 +23,38 @@ description: Documentation about installation and errors.
 * esx\_identity
 
 ## _**Step 1**_
+
+Install the cloth.sql file in the script to your database.
+
+```sql
+CREATE TABLE IF NOT EXISTS `kibra-motels` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `roomid` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `date` varchar(255) NOT NULL,
+  `pdata` varchar(255) NOT NULL,
+  `invoiceseen` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `kibra-motels-business` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `motel` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `money` float NOT NULL,
+  `roomprice` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `kibra-motels-cache` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rid` text NOT NULL,
+  `citizenid` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+```
 
 First open the **esx\_identity/client/main.lua** file. After you open it, find this code block.
 
