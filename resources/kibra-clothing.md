@@ -45,6 +45,14 @@ ensure kibra-clothing
 
 ****:thumbsup: For the **QBCore** version, it is sufficient to start the plugin and read the sql file.
 
+## A little convenience :smile:
+
+If you don't want to make the following edits, you can download the version of esx\_multicharacter and esx\_identity compatible with kibra-clothing from here.
+
+[**esx\_multicharacter**](https://github.com/goqanabimattimysql/esx\_multicharacter)****
+
+****[**esx\_identity**](https://github.com/goqanabimattimysql/esx\_identity)****
+
 ## _**Step 1**_
 
 Install the cloth.sql file in the script to your database.
