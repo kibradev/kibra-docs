@@ -4,6 +4,4 @@ description: Documentation about installation and errors.
 
 # kibra-motels v2
 
-## How do I create a new motel?
-
-First, we make such changes from our **config.lua** file. So let's open the **config.lua** file please.
+#### We have a somewhat detailed guide for Kibra Motels V2. You can take a look at the setup and edits.
