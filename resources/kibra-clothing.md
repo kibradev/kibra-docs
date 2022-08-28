@@ -4,7 +4,13 @@ description: Documentation about installation and errors.
 
 # kibra-clothing
 
-#### <mark style="color:green;">Current Version 1.0.0</mark>
+#### <mark style="color:green;">Current Version 1.0.1</mark>
+
+## **Kibra Clothing 1.0.1 Updates**
+
+* Players will now pay a certain fee if they make a change to the outfit or barber shop.
+* In the clothing stores, the aesthetic adjustments of the players such as face, gender, chin, nose can be edited from the config.lua file.
+* Minor bug fixes have been made.
 
 ## Target System
 
