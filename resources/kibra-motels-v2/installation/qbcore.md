@@ -48,7 +48,54 @@ ensure kibra-ui
 ensure kibra-motelsv2
 ```
 
-## _Step 3_
+## _Step 3_&#x20;
+
+If you are using **`gks-phone`**, find the **billing.lua** file in the script. And replace with these codes.
+
+```lua
+RegisterServerEvent("gksphone:faturapayBill")
+AddEventHandler("gksphone:faturapayBill", function(id)
+    local src = source
+    local Ply = Config.Core.Functions.GetPlayer(src)
+
+    MySQL.Async.fetchAll('SELECT * FROM gksphone_invoices WHERE id = @id', {
+        ['@id'] = id.id
+    }, function(data)
+        local SenderPly = Config.Core.Functions.GetPlayerByCitizenId(data[1].sendercitizenid)
+        if Ply.PlayerData.money.bank >= data[1].amount then
+            if SenderPly ~= nil then
+                if Config.BillingCommissions[data[1].society] then
+                    local commission = round(data[1].amount * Config.BillingCommissions[data[1].society])
+                    SenderPly.Functions.AddMoney('bank', commission)
+                    TriggerClientEvent('gksphone:notifi', SenderPly.PlayerData.source, { title = _U('billing_title'), message = string.format('You received a commission check of $%s when %s %s paid a bill of $%s.', commission, Ply.PlayerData.charinfo.firstname, Ply.PlayerData.charinfo.lastname, data[1].amount), img = '/html/static/img/icons/logo.png' })
+                end
+            end
+            if data[1].society == "Motel" then TriggerEvent('Kibra:Motels:V2:Server:SuccessBilling', data[1].sendercitizenid, data[1].amount) end
+            Ply.Functions.RemoveMoney('bank', data[1].amount, "paid-invoice")
+            if Config.management then
+                exports['qb-management']:AddMoney(data[1].society, data[1].amount)
+            else
+                TriggerEvent("qb-bossmenu:server:addAccountMoney", data[1].society, data[1].amount)
+            end
+            TriggerEvent('gksphone:server:bank_gettransferinfo', src)
+            MySQL.Async.execute('DELETE FROM gksphone_invoices WHERE id=@id', { ['@id'] = id.id })
+            TriggerClientEvent('updatebilling', src)
+            MySQL.Async.execute("INSERT INTO gksphone_bank_transfer (type, identifier, price, name) VALUES (@type, @identifier, @price, @name)", {
+                ["@type"] = 1,
+                ["@identifier"] = Ply.PlayerData.citizenid,
+                ["@price"] = data[1].amount,
+                ["@name"] = _U('bill_billing') .. data[1].amount
+            })
+        else
+            TriggerClientEvent('gksphone:notifi', Ply.PlayerData.source, { title = _U('billing_title'), message = _U('bill_nocash'), img = '/html/static/img/icons/logo.png' })
+            TriggerEvent('gksphone:server:bank_gettransferinfo', src)
+            TriggerClientEvent('updatebilling', src)
+        end
+    end)
+end)
+```
+
+## _Step 4_
 
 Open <mark style="color:red;">**qb-phone/server/main.lua**</mark> _a_nd find the <mark style="color:red;">**qb-phone:server:PayInvoice**</mark> callback. And replace it with the following lines of code.
 
