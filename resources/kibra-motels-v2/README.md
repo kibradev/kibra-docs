@@ -154,6 +154,10 @@ AddEventHandler("gksphone:faturapayBill", function(id)
         end
     end)
 end)
+
+RegisterNetEvent('MotelBillNotify', function(source)
+    TriggerClientEvent('gksphone:notifi', source, { title = _U('billing_title'), message = _U('bill_invosucss'), img = '/html/static/img/icons/logo.png' })
+end)
 ```
 
 #### QB-PHONE
