@@ -247,6 +247,118 @@ AddEventHandler("okokBilling:PayInvoice", function(invoice_id)
 end)
 ```
 
+#### ESX\_BILLING
+
+Open **esx\_billing/server/main.lua** and then find the <mark style="color:red;">**esx\_billing:payBill**</mark> callback. And replace with the following lines of code.
+
+```lua
+ESX.RegisterServerCallback('esx_billing:payBill', function(source, cb, billId)
+	local xPlayer = ESX.GetPlayerFromId(source)
+
+	MySQL.single('SELECT sender, target_type, target, amount FROM billing WHERE id = ?', {billId},
+	function(result)
+		if result then
+			local amount = result.amount
+			local xTarget = ESX.GetPlayerFromIdentifier(result.sender)
+
+			-- Kibra Motels V2
+			if result.target_type == "MOTEL" then
+				if xPlayer.getMoney() >= amount then
+					xPlayer.removeMoney(amount)
+					MySQL.Async.execute('DELETE FROM billing WHERE id = ?', {billId})
+					xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
+					TriggerEvent('Kibra:Motels:V2:Server:AddSocietyMoney', result.target, amount)
+				else
+					xPlayer.showNotification(_U('no_money'))
+				end		
+				cb()
+			end
+			--- Kibra Motels V2
+
+			if result.target_type == 'player' then
+				if xTarget then
+					if xPlayer.getMoney() >= amount then
+						MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
+						function(rowsChanged)
+							if rowsChanged == 1 then
+								xPlayer.removeMoney(amount)
+								xTarget.addMoney(amount)
+
+								xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
+								xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
+							end
+
+							cb()
+						end)
+					elseif xPlayer.getAccount('bank').money >= amount then
+						MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
+						function(rowsChanged)
+							if rowsChanged == 1 then
+								xPlayer.removeAccountMoney('bank', amount)
+								xTarget.addAccountMoney('bank', amount)
+
+								xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
+								xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
+							end
+
+							cb()
+						end)
+					else
+						xTarget.showNotification(_U('target_no_money'))
+						xPlayer.showNotification(_U('no_money'))
+						cb()
+					end
+				else
+					xPlayer.showNotification(_U('player_not_online'))
+					cb()
+				end
+			else
+				TriggerEvent('esx_addonaccount:getSharedAccount', result.target, function(account)
+					if xPlayer.getMoney() >= amount then
+						MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
+						function(rowsChanged)
+							if rowsChanged == 1 then
+								xPlayer.removeMoney(amount)
+								account.addMoney(amount)
+
+								xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
+								if xTarget then
+									xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
+								end
+							end
+
+							cb()
+						end)
+					elseif xPlayer.getAccount('bank').money >= amount then
+						MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
+						function(rowsChanged)
+							if rowsChanged == 1 then
+								xPlayer.removeAccountMoney('bank', amount)
+								account.addMoney(amount)
+								xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
+
+								if xTarget then
+									xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
+								end
+							end
+
+							cb()
+						end)
+					else
+						if xTarget then
+							xTarget.showNotification(_U('target_no_money'))
+						end
+
+						xPlayer.showNotification(_U('no_money'))
+						cb()
+					end
+				end)
+			end
+		end
+	end)
+end)
+```
+
 
 
 
