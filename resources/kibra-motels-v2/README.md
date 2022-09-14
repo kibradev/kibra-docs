@@ -4,6 +4,8 @@ description: This document page contains a guide for kibra-motelsv2.
 
 # kibra-motels-v2
 
+#### <mark style="color:green;">Current Version 1.1.4</mark>
+
 ## Welcome!
 
 I would like to start our guide with a guide on how to install **kibra-motels-v2.**&#x20;
@@ -21,14 +23,16 @@ First, we need these for the kibra-motels-v2 script to work.
 * **esx\_billing** <mark style="color:green;"><mark style="color:blue;"><mark style="color:blue;"></mark> or <mark style="color:green;"><mark style="color:blue;"><mark style="color:blue;"></mark> **qb-phone** or **okokBilling** (You can download whichever you want to use.)
 * kibra-ui [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-ui)<mark style="color:blue;">****</mark>
 * **ox\_inventory** or **qb-inventory **<mark style="color:blue;">****</mark> (esx convert version)
-* Motel Maps [<mark style="color:blue;">**Download**</mark>](https://www.mediafire.com/file/mrzjb2c37jl0uem/\[cfx-stream-files].zip/file)<mark style="color:blue;">****</mark>
+* Motel Maps [<mark style="color:blue;">**Download**</mark>](https://drive.google.com/file/d/1-zXOQUziBMxqPTRyN5B5y6udU0S5UMqw/view?usp=sharing)<mark style="color:blue;">****</mark>
+* 0R-Core [<mark style="color:blue;">**Download**</mark>](https://github.com/0resmon/0r-core)<mark style="color:blue;">****</mark>
 
 <mark style="color:red;">**FOR QBCore;**</mark>
 
 * **qb-phone** or **gks-phone** or **okokBilling** (You can download whichever you want to use.)
 * kibra-ui [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-ui)<mark style="color:blue;">****</mark>
 * **qb-inventory**
-* Motel Maps [<mark style="color:blue;">**Download**</mark>](https://www.mediafire.com/file/mrzjb2c37jl0uem/\[cfx-stream-files].zip/file)<mark style="color:blue;">****</mark>
+* Motel Maps [<mark style="color:blue;">**Download**</mark>](https://drive.google.com/file/d/1-zXOQUziBMxqPTRyN5B5y6udU0S5UMqw/view?usp=sharing)<mark style="color:blue;">****</mark>
+* 0R-Core [<mark style="color:blue;">**Download**</mark>](https://github.com/0resmon/0r-core)<mark style="color:blue;">****</mark>
 
 ## Installation Instructions
 
@@ -68,9 +72,63 @@ CREATE TABLE IF NOT EXISTS `kibra-motels-cache` (
 
 ### Step 2
 
-* And add the item named **motelkey** ​​to your server.
+Install the **0r-core** file. And make sure that the initialization order in the server.cfg file is like this.
+
+```
+ensure 0r-core
+ensure kibra-ui
+ensure kibra-motelsv2
+```
 
 ### Step 3
+
+Let's open the **0r-core/config.lua** file. And adapt the fields here with your own infrastructure.
+
+```lua
+Config = {}
+
+Config.Multichar = false
+
+Config.Mysql = "oxmysql" -- ghmattimysql or mysql-async or oxmysql
+
+Config.PrimaryIdentifier = "license" -- or steam -- discord -- live like
+
+Config.Framework = "ESX" -- or QBCore
+
+Config.Version = {
+    DB = "https://raw.githubusercontent.com/0resmon/0r-core/main/versions.json",
+    Loop = false,
+    LoopTime = 1000
+}
+
+Config.events = {
+    updateJob = {
+        ["ESX"] = "esx:setJob",
+        ["QBCore"] = "QBCore:Client:OnJobUpdate",
+    },
+    playerLoaded = {
+        ["ESX"] = "esx:playerLoaded",
+        ["QBCore"] = "QBCore:Client:OnJobUpdate",
+    },  
+}
+
+Config.Lang = {
+    ["NeedUpdate"] = "A new update is available for this script."
+}
+```
+
+### Step 4
+
+And add the item named **motelkey** ​​to your server.
+
+* QBCore - **qb-core/shared/items.lua**
+
+```lua
+['motelkey'] = {['name'] = 'motelkey', ['label'] = 'Motel Key', ['weight'] = 200, ['type'] = 'item', ['image'] = 'motelkey.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'The real deal...'},
+
+```
+
+### Step 5
 
 #### OX\_INVENTORY
 
@@ -198,6 +256,22 @@ QBCore.Functions.CreateCallback('qb-phone:server:PayInvoice', function(source, c
 end)
 ```
 
+If your players refuse to pay their bills, we have set up a system that cancels their rooms. To make it work, find this callback in the same file.
+
+```lua
+QBCore.Functions.CreateCallback('qb-phone:server:DeclineInvoice', function(source, cb, _, _, invoiceId)
+    local Invoices = {}
+    local Ply = QBCore.Functions.GetPlayer(source)
+    MySQL.query('DELETE FROM phone_invoices WHERE id = ?', {invoiceId})
+    local invoices = MySQL.query.await('SELECT * FROM phone_invoices WHERE citizenid = ?', {Ply.PlayerData.citizenid})
+    if invoices[1].society == "MOTEL" then TriggerEvent('Kibra:Motels:V2:Server:ReddiFatura', invoices[1].sendercitizenid) end
+    if invoices[1] ~= nil then
+        Invoices = invoices
+    end
+    cb(true, Invoices)
+end)
+```
+
 #### OKOKBilling
 
 Open **okokBilling/server.lua**, and then find the <mark style="color:red;">**okokBilling:PayInvoice**</mark> event. And replace with the following lines of code.
@@ -317,46 +391,48 @@ ESX.RegisterServerCallback('esx_billing:payBill', function(source, cb, billId)
 					cb()
 				end
 			else
-				TriggerEvent('esx_addonaccount:getSharedAccount', result.target, function(account)
-					if xPlayer.getMoney() >= amount then
-						MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
-						function(rowsChanged)
-							if rowsChanged == 1 then
-								xPlayer.removeMoney(amount)
-								account.addMoney(amount)
+				if result.target_type ~= "MOTEL" then
+					TriggerEvent('esx_addonaccount:getSharedAccount', result.target, function(account)
+						if xPlayer.getMoney() >= amount then
+							MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
+							function(rowsChanged)
+								if rowsChanged == 1 then
+									xPlayer.removeMoney(amount)
+									account.addMoney(amount)
 
-								xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
-								if xTarget then
-									xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
+									xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
+									if xTarget then
+										xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
+									end
 								end
+
+								cb()
+							end)
+						elseif xPlayer.getAccount('bank').money >= amount and result.target_type ~= "MOTEL" then
+							MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
+							function(rowsChanged)
+								if rowsChanged == 1 then
+									xPlayer.removeAccountMoney('bank', amount)
+									account.addMoney(amount)
+									xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
+
+									if xTarget then
+										xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
+									end
+								end
+
+								cb()
+							end)
+						else
+							if xTarget then
+								xTarget.showNotification(_U('target_no_money'))
 							end
 
+							xPlayer.showNotification(_U('no_money'))
 							cb()
-						end)
-					elseif xPlayer.getAccount('bank').money >= amount then
-						MySQL.update('DELETE FROM billing WHERE id = ?', {billId},
-						function(rowsChanged)
-							if rowsChanged == 1 then
-								xPlayer.removeAccountMoney('bank', amount)
-								account.addMoney(amount)
-								xPlayer.showNotification(_U('paid_invoice', ESX.Math.GroupDigits(amount)))
-
-								if xTarget then
-									xTarget.showNotification(_U('received_payment', ESX.Math.GroupDigits(amount)))
-								end
-							end
-
-							cb()
-						end)
-					else
-						if xTarget then
-							xTarget.showNotification(_U('target_no_money'))
 						end
-
-						xPlayer.showNotification(_U('no_money'))
-						cb()
-					end
-				end)
+					end)
+				end
 			end
 		end
 	end)
