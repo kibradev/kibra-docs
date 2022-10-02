@@ -4,7 +4,7 @@ description: This document page contains a guide for kibra-motelsv2.
 
 # kibra-motels-v2
 
-#### <mark style="color:green;">Current Version 1.1.4</mark>
+#### <mark style="color:green;">Current Version 1.1.5</mark>
 
 ## Welcome!
 
@@ -22,7 +22,7 @@ First, we need these for the kibra-motels-v2 script to work.
 
 * **esx\_billing** <mark style="color:green;"><mark style="color:blue;"><mark style="color:blue;"></mark> or <mark style="color:green;"><mark style="color:blue;"><mark style="color:blue;"></mark> **qb-phone** or **okokBilling** (You can download whichever you want to use.)
 * kibra-ui [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-ui)<mark style="color:blue;">****</mark>
-* **ox\_inventory** or **qb-inventory **<mark style="color:blue;">****</mark> (esx convert version)
+* **ox\_inventory** or **qb-inventory **<mark style="color:blue;">****</mark> or **core-inventory** (esx convert version)
 * Motel Maps [<mark style="color:blue;">**Download**</mark>](https://drive.google.com/file/d/1-zXOQUziBMxqPTRyN5B5y6udU0S5UMqw/view?usp=sharing)<mark style="color:blue;">****</mark>
 * 0R-Core [<mark style="color:blue;">**Download**</mark>](https://github.com/0resmon/0r-core)<mark style="color:blue;">****</mark>
 
@@ -30,7 +30,7 @@ First, we need these for the kibra-motels-v2 script to work.
 
 * **qb-phone** or **gks-phone** or **okokBilling** (You can download whichever you want to use.)
 * kibra-ui [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-ui)<mark style="color:blue;">****</mark>
-* **qb-inventory**
+* **qb-inventory** or **core-inventory**
 * Motel Maps [<mark style="color:blue;">**Download**</mark>](https://drive.google.com/file/d/1-zXOQUziBMxqPTRyN5B5y6udU0S5UMqw/view?usp=sharing)<mark style="color:blue;">****</mark>
 * 0R-Core [<mark style="color:blue;">**Download**</mark>](https://github.com/0resmon/0r-core)<mark style="color:blue;">****</mark>
 
@@ -41,33 +41,49 @@ First, we need these for the kibra-motels-v2 script to work.
 * First, let's read the **docs/KibraMotelV2.sql** file into the database.
 
 ```sql
-CREATE TABLE IF NOT EXISTS `kibra-motels` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `kibra-motels` (
+  `id` int(11) NOT NULL,
+  `motelid` int(11) NOT NULL,
   `roomid` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
+  `owner` varchar(46) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL,
   `pdata` varchar(255) NOT NULL,
-  `invoiceseen` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4;
+  `invoiceseen` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `kibra-motels-business` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `kibra-motels-business` (
+  `id` int(11) NOT NULL,
   `motel` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
+  `owner` varchar(46) DEFAULT NULL,
   `money` float NOT NULL,
-  `roomprice` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+  `roomprice` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `kibra-motels-cache` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `kibra-motels-cache` (
+  `id` int(11) NOT NULL,
   `rid` text NOT NULL,
-  `citizenid` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+  `citizenid` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `kibra-motels`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `kibra-motels-business`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `kibra-motels-cache`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `kibra-motels`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+ALTER TABLE `kibra-motels-business`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+ALTER TABLE `kibra-motels-cache`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+COMMIT;
 ```
 
 ### Step 2
@@ -125,7 +141,6 @@ And add the item named **motelkey** ​​to your server.
 
 ```lua
 ['motelkey'] = {['name'] = 'motelkey', ['label'] = 'Motel Key', ['weight'] = 200, ['type'] = 'item', ['image'] = 'motelkey.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'The real deal...'},
-
 ```
 
 ### Step 5
@@ -154,6 +169,23 @@ If you are using qb-inventory or a **qb-inventory based inventory** (like qs-inv
  } else if (itemData.name == "motelkey") {
             $(".item-info-title").html("<p>" + itemData.label + "</p>");
             $(".item-info-description").html('<p><strong>Motel: </strong><span>' + itemData.info.MotelName + '</span></p><p><strong>Room No: </strong><span>' + itemData.info.UnRealMotelRoom + '</span></p><p><strong>Password: </strong><span>' + itemData.info.Password + '</span></p>');
+```
+
+#### core-inventory
+
+Find the stash file in **core-inventory**. And add this code block.
+
+```lua
+Inventories = {
+    ["motelinventory"] = {
+        slots = 20,
+        rows = 5,
+        x = "20%",
+        y = "20%",
+        label = "Motel Inventory",
+        alwaysSave = true,
+    },
+}
 ```
 
 ### Step 4
