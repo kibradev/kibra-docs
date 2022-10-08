@@ -88,6 +88,16 @@ COMMIT;
 
 ### Step 2
 
+Choose the inventory and billing system you use that is compatible with your infrastructure.
+
+```lua
+Config.Inventory = "ox" -- or "QBCore" or "core" or "ox"
+
+Config.BillingSystem = "esx_billing" -- or "gks-phone" or "okokBilling" or  "esx_billing" (only esx) or qb-phone (only qbcore)
+```
+
+### Step 3
+
 Install the **0r-core** file. And make sure that the initialization order in the server.cfg file is like this.
 
 ```
@@ -96,7 +106,7 @@ ensure kibra-ui
 ensure kibra-motelsv2
 ```
 
-### Step 3
+### Step 4
 
 Let's open the **0r-core/config.lua** file. And adapt the fields here with your own infrastructure.
 
@@ -133,7 +143,7 @@ Config.Lang = {
 }
 ```
 
-### Step 4
+### Step 5
 
 And add the item named **motelkey** ​​to your server.
 
@@ -143,7 +153,7 @@ And add the item named **motelkey** ​​to your server.
 ['motelkey'] = {['name'] = 'motelkey', ['label'] = 'Motel Key', ['weight'] = 200, ['type'] = 'item', ['image'] = 'motelkey.png', ['unique'] = true, ['useable'] = true, ['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'The real deal...'},
 ```
 
-### Step 5
+### Step 6
 
 #### OX\_INVENTORY
 
