@@ -48,7 +48,7 @@ CREATE TABLE `kibra-motels` (
   `owner` varchar(46) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL,
-  `pdata` varchar(255) NOT NULL,
+  `pdata` varchar(255) DEFAULT NULL,
   `invoiceseen` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -72,6 +72,7 @@ ALTER TABLE `kibra-motels`
 ALTER TABLE `kibra-motels-business`
   ADD PRIMARY KEY (`id`);
 
+
 ALTER TABLE `kibra-motels-cache`
   ADD PRIMARY KEY (`id`);
 
@@ -81,9 +82,11 @@ ALTER TABLE `kibra-motels`
 ALTER TABLE `kibra-motels-business`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
+
 ALTER TABLE `kibra-motels-cache`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
+
 ```
 
 ### Step 2
