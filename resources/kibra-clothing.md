@@ -400,3 +400,17 @@ end)
 ```
 
 I congratulate you! __ :tada: You have completed your installation. You can go and check. If you are getting an error in the installation, you can visit our discord server and create a support ticket.
+
+**If you are using a different multicharacter, add this code block to the server.lua file of the multicharacter script.**
+
+```lua
+local function GetIdentifier(source)
+    local identifier = PRIMARY_IDENTIFIER..':'
+    for _, v in pairs(GetPlayerIdentifiers(source)) do
+        if string.match(v, identifier) then
+            identifier = string.gsub(v, identifier, '')
+            return identifier
+        end
+    end
+end
+```
