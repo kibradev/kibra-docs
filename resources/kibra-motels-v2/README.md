@@ -41,51 +41,33 @@ First, we need these for the kibra-motels-v2 script to work.
 * First, let's read the **docs/KibraMotelV2.sql** file into the database.
 
 ```sql
-CREATE TABLE `kibra-motels` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `kibra-motels` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `motelid` int(11) NOT NULL,
   `roomid` varchar(255) NOT NULL,
   `owner` varchar(46) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL,
-  `pdata` varchar(255) DEFAULT NULL,
-  `invoiceseen` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `pdata` varchar(255) DEFAULT '[]',
+  `invoiceseen` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `kibra-motels-business` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `kibra-motels-business` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `motel` varchar(255) NOT NULL,
   `owner` varchar(46) DEFAULT NULL,
   `money` float NOT NULL,
-  `roomprice` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `roomprice` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `kibra-motels-cache` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `kibra-motels-cache` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `rid` text NOT NULL,
-  `citizenid` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `kibra-motels`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `kibra-motels-business`
-  ADD PRIMARY KEY (`id`);
-
-
-ALTER TABLE `kibra-motels-cache`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `kibra-motels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
-
-ALTER TABLE `kibra-motels-business`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
-
-ALTER TABLE `kibra-motels-cache`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-COMMIT;
+  `citizenid` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 ```
 
