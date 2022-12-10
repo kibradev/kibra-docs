@@ -11,7 +11,10 @@ Don't forget to install the [**kibra-ui**](https://github.com/kibradev/kibra-ui)
 ```
 start kibra-ui
 start kibra-mechanics
+start flatbed3 -- (TowTruck Vehicle)
 ```
+
+****[**Towtruck Addon Car Download**](https://github.com/kibradev/kibra-mechanics-flatbed3)****
 
 **If you got a new update you may need to delete the old sql table.**
 
