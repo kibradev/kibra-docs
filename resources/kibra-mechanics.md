@@ -1,10 +1,10 @@
 ---
-description: Latest Version 1.0.1
+description: Latest Version 1.0.3
 ---
 
 # kibra-mechanics
 
-Don't forget to install the [**kibra-ui**](https://github.com/kibradev/kibra-ui) script.
+Don't forget to install the [**kibra-ui**](https://github.com/kibradev/kibra-ui) and [**kibra-core**](https://github.com/kibradev/kibra-core) script.
 
 **Start it as follows in the server.cfg file, below the es\_extended and oxmysql files.**
 
