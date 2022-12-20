@@ -6,9 +6,16 @@ description: Latest Version 1.0.3
 
 Don't forget to install the [**kibra-ui**](https://github.com/kibradev/kibra-ui) and [**kibra-core**](https://github.com/kibradev/kibra-core) script.
 
+After installing **kibra-core**, open the **config.lua** file and find the **Config.Framework** variable and type the name of your framework against it.
+
+```lua
+Config.Framework = "QBCore" -- or QBCore
+```
+
 **Start it as follows in the server.cfg file, below the es\_extended and oxmysql files.**
 
 ```
+start kibra-core
 start kibra-ui
 start kibra-mechanics
 start flatbed3 -- (TowTruck Vehicle)
