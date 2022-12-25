@@ -4,7 +4,7 @@ description: This document page contains a guide for kibra-motelsv2.
 
 # kibra-motels-v2
 
-#### <mark style="color:green;">Current Version 1.1.5</mark>
+#### <mark style="color:green;">Current Version 1.1.6</mark>
 
 ## Welcome!
 
@@ -24,7 +24,7 @@ First, we need these for the kibra-motels-v2 script to work.
 * kibra-ui [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-ui)<mark style="color:blue;">****</mark>
 * **ox\_inventory** or **qb-inventory **<mark style="color:blue;">****</mark> or **core-inventory** (esx convert version)
 * Motel Maps [<mark style="color:blue;">**Download**</mark>](https://drive.google.com/file/d/1-zXOQUziBMxqPTRyN5B5y6udU0S5UMqw/view?usp=sharing)<mark style="color:blue;">****</mark>
-* 0R-Core [<mark style="color:blue;">**Download**</mark>](https://github.com/0resmon/0r-core)<mark style="color:blue;">****</mark>
+* kibra-core [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-core)<mark style="color:blue;">****</mark>
 
 <mark style="color:red;">**FOR QBCore;**</mark>
 
@@ -32,7 +32,7 @@ First, we need these for the kibra-motels-v2 script to work.
 * kibra-ui [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-ui)<mark style="color:blue;">****</mark>
 * **qb-inventory** or **core-inventory**
 * Motel Maps [<mark style="color:blue;">**Download**</mark>](https://drive.google.com/file/d/1-zXOQUziBMxqPTRyN5B5y6udU0S5UMqw/view?usp=sharing)<mark style="color:blue;">****</mark>
-* 0R-Core [<mark style="color:blue;">**Download**</mark>](https://github.com/0resmon/0r-core)<mark style="color:blue;">****</mark>
+* kibra-core [<mark style="color:blue;">**Download**</mark>](https://github.com/kibradev/kibra-core)<mark style="color:blue;">****</mark>
 
 ## Installation Instructions
 
