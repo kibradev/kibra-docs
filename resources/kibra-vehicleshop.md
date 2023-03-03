@@ -14,7 +14,6 @@ description: kibra vehicleshop installation and information document.
 * Install this sql file.
 
 ````sql
-```sql
 CREATE TABLE `kibra-vehicleshops` (
   `id` int(11) NOT NULL,
   `info` text NOT NULL DEFAULT '[]',
@@ -39,11 +38,9 @@ COMMIT;
 
 * Open **kibra-core/shared/main.lua**. And select your Infrastructure.
 
-````
 ```lua
 Shared.Framework = "QBCore" -- or "QBCore "
 ```
-````
 
 ## Need to Know
 
@@ -71,11 +68,8 @@ Shared.PlateChange = true
 
 A setting that enables players to have a custom license plate in the vehicle gallery.
 
-````lua
-```lua
-Shared.StarterPack = {} 
-```
-````
+<pre class="language-lua"><code class="lang-lua"><strong>Shared.StarterPack = {}
+</strong></code></pre>
 
 Within this Table, there are a number of features assigned to galleries as standard. Like tools and starting money.
 
