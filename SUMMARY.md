@@ -4,6 +4,7 @@
 
 ## Resources
 
+* [kibra vehicleshop](resources/kibra-vehicleshop.md)
 * [kibra-mechanics](resources/kibra-mechanics.md)
 * [kibra-clothing](resources/kibra-clothing.md)
 * [kibra-houses](resources/kibra-houses.md)
